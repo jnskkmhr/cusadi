@@ -27,6 +27,7 @@ def main(args):
     end = time.perf_counter_ns()
     print(f"Time taken to evaluate {args.n_envs} environments: {(end-start)/1e9:.6f} seconds")
     print("Time eval out: ", fn_cusadi.eval_time)
+    print("out: ", fn_cusadi.getDenseOutput(0).shape)
 
     output_numpy = [numpy.zeros((args.n_envs, f.nnz_out(i))) for i in range(f.n_out())]
     for n in range(args.n_envs):

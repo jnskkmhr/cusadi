@@ -17,12 +17,14 @@ def main(args):
                 print("CasADi function found: ", f)
                 casadi_fns.append(casadi.Function.load(f))
     for f in casadi_fns:
-        if args.precision:
+        if args.precision == "double":
             print("Generating double code")
             generateCUDACodeDouble(f)
-        else:
+        elif args.precision == "float":
             print("Generating float code")
             generateCUDACodeFloat(f)
+        else: 
+            raise ValueError("Precision must be 'float' or 'double'")
         # generateCUDACodeFloat(f)
         # generateCUDACodeDouble(f)
         if args.gen_pytorch:
@@ -61,8 +63,8 @@ def setupParser():
     parser = argparse.ArgumentParser(description='Script to generate parallelized code from CasADi functions')
     parser.add_argument('--fn', type=str, dest='fn_name', default='all',
                         help='Function to parallelize in cusadi/casadi_functions, defaults to "all"')
-    parser.add_argument('--precision', type=bool, dest='precision', default=True,
-                        help='Precision of generated fn. True: double, False: float. Defaults to double')
+    parser.add_argument('--precision', type=str, dest='precision', default="double",
+                        help='Precision of generated fn.')
     parser.add_argument('--gen_CUDA', type=bool, dest='gen_CUDA', default=True,
                         help='Generate CUDA codegen. Defaults to True')
     parser.add_argument('--gen_pytorch', type=bool, dest='gen_pytorch', default=False,
